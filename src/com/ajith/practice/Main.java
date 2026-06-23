@@ -89,14 +89,27 @@ public class Main {
         System.out.println("Bias score: " + finalBiascount);
 
         if  (finalBiascount <= 0) {
-            System.out.println("Low bias dectected");
+            System.out.println("Low bias detected");
         } else if (finalBiascount >= 1 && finalBiascount <= 3) {
-            System.out.println("Medium bias dectected");
+            System.out.println("Medium bias detected");
             
         }   else if (finalBiascount >= 4) {
-        System.out.println("High bias dectected");
+        System.out.println("High bias detected");
 
     }
+        System.out.println();
+
+        if (appearanceCount > 0 && skillCount == 0) {
+            System.out.println("Diagnosis: This sentence focuses on appearance however it never focuses on skill or intellect.");
+        }
+
+        if (emotionalCount > 0 && skillCount == 0) {
+            System.out.println("Diagnosis: This sentence has more nurturing and caregiver words rather than skill words");
+        }
+
+        if (skillCount > 0) {
+            System.out.println("Diagnosis: This sentence has some power/skill language");
+        }
 
         scanner.close();
     }
