@@ -90,7 +90,7 @@ public class Main {
 
         if  (finalBiascount <= 0) {
             System.out.println("Low bias detected");
-        } else if (finalBiascount >= 1 && finalBiascount <= 3) {
+        } else if (finalBiascount <= 3) {
             System.out.println("Medium bias detected");
             
         }   else if (finalBiascount >= 4) {
