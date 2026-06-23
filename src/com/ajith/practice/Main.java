@@ -83,6 +83,21 @@ public class Main {
         System.out.println("Skill and Power count: " + skillCount);
         System.out.println("Gender pronoun count: " + genderCount);
 
+        //ADDED FINAL BIAS SCORES
+       int finalBiascount = appearanceCount + emotionalCount + genderCount - skillCount;
+
+        System.out.println("Bias score: " + finalBiascount);
+
+        if  (finalBiascount <= 0) {
+            System.out.println("Low bias dectected");
+        } else if (finalBiascount >= 1 && finalBiascount <= 3) {
+            System.out.println("Medium bias dectected");
+            
+        }   else if (finalBiascount >= 4) {
+        System.out.println("High bias dectected");
+
+    }
+
         scanner.close();
     }
 
