@@ -72,22 +72,30 @@ public class Main {
         System.out.println();
         System.out.println("--- Analysis Result ----");
 
-        checkWords(userWords, appearanceWords, "Appearance");
-        checkWords(userWords, emotionalWords, "Emotional/support/nuturing");
-        checkWords(userWords, powerWords, "Power/skill/brains");
-        checkWords(userWords, genderWords, "Gender prnouns");
+        int appearanceCount = checkWords(userWords, appearanceWords, "Appearance");
+        int emotionalCount = checkWords(userWords, emotionalWords, "Emotional/support/nurturing");
+        int skillCount = checkWords(userWords, powerWords, "Power/skill/brains");
+        int genderCount = checkWords(userWords, genderWords, "Gender pronouns");
+
+        System.out.println("-- BIAS AGAINST WOMEN COUNT ---");
+        System.out.println("Appearance count: " + appearanceCount);
+        System.out.println("Emotional/support count: " + emotionalCount);
+        System.out.println("Skill and Power count: " + skillCount);
+        System.out.println("Gender pronoun count: " + genderCount);
 
         scanner.close();
     }
 
-    public static void checkWords(String[] userWords, ArrayList<String> wordList, String categoryName) {
+    public static int checkWords(String[] userWords, ArrayList<String> wordList, String categoryName) {
         boolean foundAny = false;
+        int count = 0;
         System.out.println(categoryName + " words found:");
 
         for (String w : userWords) {
             w = w.replaceAll("[^a-z]", "");
 
             if (wordList.contains(w)) {
+                count++;
                 foundAny = true;
                 System.out.println("- " + w);
 
@@ -97,5 +105,6 @@ public class Main {
             System.out.println("No words found.");
         }
 
+        return count;
     }
 }
