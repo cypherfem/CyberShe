@@ -32,7 +32,6 @@ public class Main {
         emotionalWords.add("mature");
         emotionalWords.add("gentle");
         emotionalWords.add("loving");
-        emotionalWords.add("soft spoken");
         emotionalWords.add("submissive");
         emotionalWords.add("bossy");
         emotionalWords.add("nurturing");
@@ -73,28 +72,30 @@ public class Main {
         System.out.println();
         System.out.println("--- Analysis Result ----");
 
-        for (String w : userWords) {
-
-            // if its not a letter from a to z remove it. like commas, periods,etc
-            w = w.replaceAll("[^a-z]", "");
-
-            if (appearanceWords.contains(w)) {
-                System.out.println("Appearance word found: " + w);
-            }
-
-            if (emotionalWords.contains(w)) {
-                System.out.println("Emotional/support word found: " + w);
-            }
-
-            if (powerWords.contains(w)) {
-                System.out.println("Power/skill word found: " + w);
-            }
-
-            if (genderWords.contains(w)) {
-                System.out.println("Gender reference found: " + w);
-            }
-        }
+        checkWords(userWords, appearanceWords, "Appearance");
+        checkWords(userWords, emotionalWords, "Emotional/support/nuturing");
+        checkWords(userWords, powerWords, "Power/skill/brains");
+        checkWords(userWords, genderWords, "Gender prnouns");
 
         scanner.close();
+    }
+
+    public static void checkWords(String[] userWords, ArrayList<String> wordList, String categoryName) {
+        boolean foundAny = false;
+        System.out.println(categoryName + " words found:");
+
+        for (String w : userWords) {
+            w = w.replaceAll("[^a-z]", "");
+
+            if (wordList.contains(w)) {
+                foundAny = true;
+                System.out.println("- " + w);
+
+
+        }
+        } if (foundAny == false) {
+            System.out.println("No words found.");
+        }
+
     }
 }
