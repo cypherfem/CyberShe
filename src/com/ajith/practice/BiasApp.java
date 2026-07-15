@@ -3,39 +3,87 @@ package com.ajith.practice;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class BiasApp extends Application {
 
-    Button button;
+    @Override
+    public void start(Stage primaryStage) {
+
+        // Create the desktop app buttons
+        Button analyzerApp = new Button("Bias Analyzer");
+        Button researchNotes = new Button("Research Notes");
+        Button messagesApp = new Button("Messages");
+
+        // Create the desktop layout
+        VBox desktopIcons = new VBox(10);
+
+        desktopIcons.getChildren().addAll(
+                analyzerApp,
+                researchNotes,
+                messagesApp
+        );
+
+        // The scene initially displays the desktop layout
+        Scene scene = new Scene(desktopIcons, 600, 400);
+
+        primaryStage.setTitle("amaya's computer :]");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+        TextArea sentenceBox = new TextArea();
+        Label resultLabel = new Label();
+
+        sentenceBox.setPromptText("Enter a sentence...");
+        Button analyzeButton = new Button("Analyze");
+
+        analyzeButton.setOnAction(event -> {
+            String sentence = sentenceBox.getText();
+
+
+
+            if (sentence.isEmpty()) {
+                resultLabel.setText("Please input a sentence!");
+
+            } else {
+                String analysisResult = Main.analyzeSentence(sentence);
+                resultLabel.setText(analysisResult);
+            }
+        });
+
+        // Runs when the Bias Analyzer button is clicked
+        analyzerApp.setOnAction(actionEvent -> {
+
+
+
+
+            Button backButton = new Button("Back");
+
+
+
+            VBox analyzerLayout = new VBox(10);
+
+            analyzerLayout.getChildren().addAll(
+                    sentenceBox,
+                    analyzeButton,
+                    resultLabel,
+                    backButton
+            );
+
+            // Replace the desktop with the analyzer screen
+            scene.setRoot(analyzerLayout);
+
+            // Return to the desktop screen
+            backButton.setOnAction(backEvent -> {
+                scene.setRoot(desktopIcons);
+            });
+        });
+    }
 
     public static void main(String[] args) {
         launch(args);
-    }
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("amaya's computer :]");
-
-        button = new Button();
-        button.setText("click here");
-
-        StackPane layout = new StackPane();
-        layout.getChildren().add(button);
-
-        VBox appIcons = new VBox();
-        appIcons.getChildren().add(button);
-        appIcons.getChildren().add(button);
-        appIcons.getChildren().add(button);
-        appIcons.getChildren().add(button);
-
-
-
-        Scene scene = new Scene(layout, 300, 250);
-
-        primaryStage.setScene(scene);
-        primaryStage.show();
     }
 }
