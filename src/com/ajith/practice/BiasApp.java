@@ -36,21 +36,32 @@ public class BiasApp extends Application {
 
         TextArea sentenceBox = new TextArea();
         Label resultLabel = new Label();
+        TextArea results = new TextArea();
+        results.setEditable(false);
 
         sentenceBox.setPromptText("Enter a sentence...");
         Button analyzeButton = new Button("Analyze");
+        Button clearButton = new Button("Clear");
+
+        clearButton.setOnAction(actionEvent -> {
+            sentenceBox.clear();
+            resultLabel.setText("");
+            results.clear();
+        });
+
 
         analyzeButton.setOnAction(event -> {
             String sentence = sentenceBox.getText();
 
+            resultLabel.setText("");
+            results.clear();
 
-
-            if (sentence.isEmpty()) {
+            if (sentence.isBlank()) {
                 resultLabel.setText("Please input a sentence!");
 
             } else {
                 String analysisResult = Main.analyzeSentence(sentence);
-                resultLabel.setText(analysisResult);
+                results.setText(analysisResult);
             }
         });
 
@@ -70,6 +81,8 @@ public class BiasApp extends Application {
                     sentenceBox,
                     analyzeButton,
                     resultLabel,
+                    results,
+                    clearButton,
                     backButton
             );
 

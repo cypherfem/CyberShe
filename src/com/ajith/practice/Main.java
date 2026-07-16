@@ -13,7 +13,8 @@ public class Main {
             if (userText.equals("exit")) {
                 break;
             }
-            analyzeSentence(userText);
+            String analysisResult = analyzeSentence(userText);
+            System.out.println(analysisResult);
 
 
 
@@ -25,7 +26,7 @@ public class Main {
         System.out.println("Program ended.");
     }
 
-    public static void analyzeSentence(String userText) {
+    public static String analyzeSentence(String userText) {
         ArrayList<String> flaggedWords = createFlaggedWords();
         String[] userWords = userText.split(" ");
 
@@ -48,6 +49,7 @@ public class Main {
         System.out.println("Emotional/support count: " + emotionalCount);
         System.out.println("Skill and Power count: " + skillCount);
         System.out.println("Gender pronoun count: " + genderCount);
+
         int finalBiasCount = calculateBiasScore(
                 appearanceCount,
                 genderCount,
@@ -72,8 +74,25 @@ public class Main {
 
         String newText = rewriteWords(userText);
 
-        printSummary(biasLevel, diagnosis,  userText, newText);
+        StringBuilder results = new StringBuilder();
 
+        //get final bias counts
+        results.append("Bias level: ");
+        results.append(biasLevel);
+        results.append("\n");
+
+        //get the diagnosis
+        results.append(diagnosis);
+        results.append("\n");
+
+        if(!newText.equals(userText)) {
+            results.append("Possible rewrite: ");
+            results.append(newText);
+        } else {
+            results.append("No rewrite changes needed.");
+        }
+
+        return results.toString();
     }
 
     public static int checkWords(String[] userWords, ArrayList<String> wordList, String categoryName) {
