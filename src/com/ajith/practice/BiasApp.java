@@ -108,7 +108,7 @@ public class BiasApp extends Application {
 
             // Return to the desktop screen
             backButton.setOnAction(backEvent -> {
-                scene.setRoot(desktopIcons);
+                scene.setRoot(amayaLayout);
             });
         });
     }
