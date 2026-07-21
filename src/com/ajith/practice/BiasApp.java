@@ -1,10 +1,12 @@
 package com.ajith.practice;
-
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -27,12 +29,27 @@ public class BiasApp extends Application {
                 messagesApp
         );
 
+
+        Image backgroundImage = new Image("file:src/images/background.jpg");
+        ImageView backgroundView = new ImageView(backgroundImage);
+        backgroundView.setFitWidth(600);
+        backgroundView.setFitHeight(400);
+        StackPane amayaLayout  = new StackPane();
+
+        amayaLayout.getChildren().addAll(
+                backgroundView,
+                desktopIcons
+
+        );
+
         // The scene initially displays the desktop layout
-        Scene scene = new Scene(desktopIcons, 600, 400);
+        Scene scene = new Scene(amayaLayout, 600, 400);
 
         primaryStage.setTitle("amaya's computer :]");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+
 
         TextArea sentenceBox = new TextArea();
         Label resultLabel = new Label();
