@@ -33,7 +33,7 @@ public class Main {
         System.out.println();
         System.out.println("--- Analysis Result ----");
         ArrayList<String> powerWords = createPowerwords();
-        ArrayList<String> emotionalWords = createEmotionalwords();
+        ArrayList<String> emotionalWords = createEmotionalWords();
         ArrayList<String> appearanceWords = createAppearancewords();
         ArrayList<String> genderWords = createGenderwords();
 
@@ -52,6 +52,7 @@ public class Main {
 
         int finalBiasCount = calculateBiasScore(
                 appearanceCount,
+                emotionalCount,
                 genderCount,
                 skillCount,
                 flaggedCount
@@ -158,13 +159,58 @@ public class Main {
         return appearanceWords;
     }
 
-    public static ArrayList<String> createPowerwords() {
+    public static ArrayList<String> createEmotionalphrases() {
+        ArrayList<String> emotionalStereotypes = new ArrayList<String>();
+        emotionalStereotypes.add("are emotional");
+        emotionalStereotypes.add("are complicated");
+        emotionalStereotypes.add("are always nagging");
+        emotionalStereotypes.add("naturally emotional");
+        emotionalStereotypes.add("aren't rowdy");
+        emotionalStereotypes.add("are naturally weaker");
+        emotionalStereotypes.add("too sensitive");
+        emotionalStereotypes.add("are naturally irrational");
+        emotionalStereotypes.add("always dramatic");
+
+
+
+        emotionalStereotypes.add("Women are always nagging");
+
+
+return emotionalStereotypes;
+    }
+
+
+        public static ArrayList<String> createPowerwords() {
 
         ArrayList<String> powerWords = new ArrayList<String>();
         powerWords.add("skilled");
         powerWords.add("technical");
         powerWords.add("smart");
         powerWords.add("leader");
+        powerWords.add("leaders");
+        powerWords.add("mathematicians");
+        powerWords.add("intelligent");
+        powerWords.add("thinker");
+        powerWords.add("logical");
+        powerWords.add("fighter");
+        powerWords.add("fighters");
+        powerWords.add("engineers");
+        powerWords.add("developer");
+        powerWords.add("programmer");
+        powerWords.add("mathematics");
+        powerWords.add("developers");
+        powerWords.add("scientist");
+        powerWords.add("scientists");
+        powerWords.add("skilled");
+        powerWords.add("lead");
+        powerWords.add("code");
+        powerWords.add("problem solver");
+        powerWords.add("genius");
+        powerWords.add("determined");
+        powerWords.add("determination");
+        powerWords.add("grit");
+        powerWords.add("math");
+        powerWords.add("technology");
         powerWords.add("confident");
         powerWords.add("boss");
         powerWords.add("assertive");
@@ -172,42 +218,63 @@ public class Main {
         powerWords.add("sharp");
         powerWords.add("powerful");
         powerWords.add("expert");
+        powerWords.add("experts");
         powerWords.add("engineer");
         powerWords.add("mathematician");
         powerWords.add("capable");
+        powerWords.add("ambitious");
+        powerWords.add("driven");
+        powerWords.add("coders");
+        powerWords.add("programmers");
+        powerWords.add("math");
+        powerWords.add("physics");
+        powerWords.add("engineers");
+        powerWords.add("coding");
 
         return powerWords;
     }
 
-    public static ArrayList<String> createEmotionalwords() {
+    public static ArrayList<String> createEmotionalWords() {
 
-        ArrayList<String> emotionalWords = new ArrayList<String>();
+        ArrayList<String> emotionalWords = new ArrayList<>();
+
         emotionalWords.add("kind");
         emotionalWords.add("helpful");
         emotionalWords.add("sensitive");
+        emotionalWords.add("emotional");
         emotionalWords.add("caring");
         emotionalWords.add("sweet");
         emotionalWords.add("mature");
         emotionalWords.add("gentle");
         emotionalWords.add("loving");
-        emotionalWords.add("submissive");
-        emotionalWords.add("bossy");
-        emotionalWords.add("calculated");
         emotionalWords.add("nurturing");
+        emotionalWords.add("bubbly");
+        emotionalWords.add("perky");
 
         return emotionalWords;
     }
     public static ArrayList<String> createFlaggedWords() {
+
         ArrayList<String> flaggedWords = new ArrayList<>();
 
         flaggedWords.add("bossy");
         flaggedWords.add("chick");
         flaggedWords.add("submissive");
         flaggedWords.add("hysterical");
+        flaggedWords.add("hysteric");
         flaggedWords.add("overemotional");
+        flaggedWords.add("dramatic");
+        flaggedWords.add("crazy");
+        flaggedWords.add("irrational");
+        flaggedWords.add("feisty");
+        flaggedWords.add("sassy");
+        flaggedWords.add("catty");
+        flaggedWords.add("nag");
+        flaggedWords.add("ditzy");
 
         return flaggedWords;
     }
+
     public static ArrayList<String> createGenderwords() {
 
         ArrayList<String> genderWords = new ArrayList<String>();
@@ -230,6 +297,7 @@ public class Main {
     public static int calculateBiasScore(
             int appearanceCount,
             int genderCount,
+            int emotionalCount,
             int skillCount,
             int flaggedCount) {
 
@@ -239,7 +307,7 @@ public class Main {
 
         int finalBiasCount = flaggedCount * 2;
 
-        if (appearanceCount > 0 && skillCount == 0) {
+        if (appearanceCount > 0 && skillCount == 0 && emotionalCount > 0 && skillCount == 0) {
             finalBiasCount++;
         }
 
@@ -286,18 +354,7 @@ public class Main {
 
         return "Diagnosis: No obvious bias was detected using the current word lists.";
     }
-    public static void printSummary(String biasLevel, String diagnosis, String userText, String newText) {
-        System.out.println();
-        System.out.println("--- Summary ---");
-        System.out.println("Bias level: " + biasLevel);
-        System.out.println(diagnosis);
 
-        if (!newText.equals(userText)) {
-            System.out.println("Suggested rewrite: " + newText);
-        } else {
-            System.out.println("No rewrite changes needed based on current word list.");
-        }
-    }
 
 
 
