@@ -25,7 +25,6 @@ public class BiasApp extends Application {
 
        //buttons for laptop
         Button analyzerApp = new Button("Bias Analyzer");
-        Button newsApp = new Button("News");
         Button womanosphere = new Button("womanosphere");
 
 
@@ -35,7 +34,6 @@ public class BiasApp extends Application {
         //adding children (apps) into the desktopIcons Vbox
         desktopIcons.getChildren().addAll(
                 analyzerApp,
-                newsApp,
                 womanosphere
         );
 
@@ -176,16 +174,64 @@ public class BiasApp extends Application {
         });
 
 
-        newsApp.setOnAction(actionEvent -> {
+        Image newsIconImage =
+                new Image("file:src/images/news_icon.png");
+
+        ImageView newsIconView =
+                new ImageView(newsIconImage);
+
+        newsIconView.setFitWidth(60);
+        newsIconView.setPreserveRatio(true);
+
+        Label newsLabel = new Label("news");
+
+        newsLabel.setStyle(
+                "-fx-background-color: transparent;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-size: 16px;"
+        );
+
+        VBox newsIconBox = new VBox(10);
+        newsIconBox.setAlignment(Pos.CENTER_LEFT);
+
+        newsIconBox.getChildren().addAll(
+                newsIconView,
+                newsLabel
+        );
+
+        desktopIcons.getChildren().add(newsIconBox);
+
+        newsIconBox.setOnMouseClicked(actionEvent -> {
 
             Image news = new Image("file:src/images/news.png");
             ImageView newsView = new ImageView(news);
-            amayaLayout.getChildren().add(newsView);
+
+            newsView.setFitWidth(900);
+            newsView.setPreserveRatio(true);
+
+            ScrollPane newsScrollPane = new ScrollPane(newsView);
+
+            // Size of the news window, not the entire scre
+
+            newsScrollPane.setPrefSize(750, 650);
+            newsScrollPane.setMaxSize(750, 650);
 
 
+            newsScrollPane.setPannable(true);
 
+            // Centers the image inside the ScrollPane
+            newsScrollPane.setFitToWidth(false);
 
+            // Makes the area around the article transparent
+            newsScrollPane.setStyle(
+                    "-fx-background-color: transparent;" +
+                            "-fx-background: transparent;"
+            );
 
+            // Centers the entire news window on the desktop
+            StackPane.setAlignment(newsScrollPane, Pos.CENTER);
+
+            amayaLayout.getChildren().add(newsScrollPane);
 
         });
 
@@ -208,7 +254,7 @@ public class BiasApp extends Application {
         );
         VBox videoIconpic = new VBox(10);
 
-        videoIconpic.setAlignment(Pos.CENTER);
+        videoIconpic.setAlignment(Pos.CENTER_LEFT);
         videoIconpic.getChildren().addAll(videoIconview, videoLabel);
         desktopIcons.getChildren().add(videoIconpic);
 
