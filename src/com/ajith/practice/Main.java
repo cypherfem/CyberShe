@@ -232,7 +232,23 @@ return emotionalStereotypes;
 
         return beautySterotypes;
     }
+    public static ArrayList<String> leadershipPhrases() {
 
+        ArrayList<String> leadershipSterotypes = new ArrayList<String>();
+        leadershipSterotypes.add("cannot lead");
+        leadershipSterotypes.add("be followers");
+        leadershipSterotypes.add("shouldn't be leaders");
+        leadershipSterotypes.add("shouldn't be a leader");
+        leadershipSterotypes.add("are not built to lead");
+        leadershipSterotypes.add("too irrational to lead");
+        leadershipSterotypes.add("not capable of leading");
+        leadershipSterotypes.add("must be below man");
+        leadershipSterotypes.add("too emotional to lead");
+
+
+
+        return leadershipSterotypes;
+    }
 
     public static ArrayList<String> abilityPhrases() {
 
