@@ -233,6 +233,25 @@ return emotionalStereotypes;
         return beautySterotypes;
     }
 
+
+    public static ArrayList<String> abilityPhrases() {
+
+        ArrayList<String> abiltySterotypes = new ArrayList<String>();
+        abiltySterotypes.add("can't be in STEM");
+        abiltySterotypes.add("can't beat a man");
+        abiltySterotypes.add("can't play chess");
+        abiltySterotypes.add("not smart enough");
+        abiltySterotypes.add("aren't strong");
+        abiltySterotypes.add("dumb blonde");
+        abiltySterotypes.add("not simple");
+        abiltySterotypes.add("not logical");
+        abiltySterotypes.add("can't understand technology");
+
+
+
+        return abiltySterotypes;
+    }
+
         public static ArrayList<String> createPowerwords() {
 
         ArrayList<String> powerWords = new ArrayList<String>();
