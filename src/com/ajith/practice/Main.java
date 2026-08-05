@@ -331,9 +331,7 @@ return emotionalStereotypes;
 
         int finalBiasCount = flaggedCount * 2;
 
-        if (appearanceCount > 0 && skillCount == 0) {
-            finalBiasCount++;
-        }
+
         if (appearanceCount > 0 && skillCount == 0) {
             finalBiasCount++;
         }
