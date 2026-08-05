@@ -202,7 +202,36 @@ public class Main {
 
 return emotionalStereotypes;
     }
+    public static ArrayList<String> createDomesticphrases() {
 
+        ArrayList<String> domesticSterotypes = new ArrayList<String>();
+        domesticSterotypes.add("belong in the kitchen");
+        domesticSterotypes.add("must cook and clean");
+        domesticSterotypes.add("submit to their husband");
+        domesticSterotypes.add("naturally want kids");
+        domesticSterotypes.add("serves their husband");
+        domesticSterotypes.add("make me a sandwich");
+        domesticSterotypes.add("role  in the kitchen");
+        domesticSterotypes.add("must take care of the children");
+        domesticSterotypes.add("should stay at home");
+        domesticSterotypes.add("should be a housewife");
+
+
+
+        return domesticSterotypes;
+    }
+
+    public static ArrayList<String> createBeautyphrases() {
+
+        ArrayList<String> beautySterotypes = new ArrayList<String>();
+        beautySterotypes.add("only good for her looks");
+        beautySterotypes.add("just a pretty face");
+        beautySterotypes.add("too unattractive for");
+        beautySterotypes.add("just chosen for her looks");
+        beautySterotypes.add("all makeup");
+
+        return beautySterotypes;
+    }
 
         public static ArrayList<String> createPowerwords() {
 
@@ -295,6 +324,8 @@ return emotionalStereotypes;
         flaggedWords.add("catty");
         flaggedWords.add("nag");
         flaggedWords.add("ditzy");
+        flaggedWords.add("fake");
+
 
         return flaggedWords;
     }
