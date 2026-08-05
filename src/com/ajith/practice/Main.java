@@ -36,12 +36,14 @@ public class Main {
         ArrayList<String> emotionalWords = createEmotionalWords();
         ArrayList<String> appearanceWords = createAppearancewords();
         ArrayList<String> genderWords = createGenderwords();
+        ArrayList<String> emotionalPhrasesgen = createEmotionalphrases();
 
         int appearanceCount = checkWords(userWords, appearanceWords, "Appearance");
         int emotionalCount = checkWords(userWords, emotionalWords, "Emotional/support/nurturing");
         int skillCount = checkWords(userWords, powerWords, "Power/skill/brains");
         int genderCount = checkWords(userWords, genderWords, "Gender pronouns");
         int flaggedCount = checkWords(userWords, flaggedWords, "May be biased");
+        int emotionalPhrasecount = checkPhrases(userText, emotionalPhrasesgen, "Emotional stereotype");
 
         System.out.println("-- BIAS AGAINST WOMEN COUNT ---");
         System.out.println("Appearance count: " + appearanceCount);
@@ -49,6 +51,7 @@ public class Main {
         System.out.println("Emotional/support count: " + emotionalCount);
         System.out.println("Skill and Power count: " + skillCount);
         System.out.println("Gender pronoun count: " + genderCount);
+        System.out.println("Emotional stereotype against phrase count: " + emotionalPhrasecount);
 
         int finalBiasCount = calculateBiasScore(
                 appearanceCount,
@@ -119,6 +122,31 @@ public class Main {
         return count;
     }
 
+    public static int checkPhrases(String userWords, ArrayList<String> phraseList, String categoryName) {
+        boolean foundAny = false;
+        int count = 0;
+        System.out.println(categoryName + " phrases found:");
+
+
+        String cleanedText = userWords
+                .toLowerCase()
+                .replaceAll("[^a-z' ]", "");
+        for (String phrase : phraseList) {
+            if (cleanedText.contains(phrase)) {
+                System.out.println("Found: " + phrase);
+                count++;
+                foundAny = true;
+            }
+        }
+        if (!foundAny) {
+            System.out.println("No biased phrases found.");
+        }
+
+        return count;
+
+    }
+
+
     public static String rewriteWords(String userText) {
         int rewriteCount = 0;
         String[] newText = userText.split(" ");
@@ -170,10 +198,6 @@ public class Main {
         emotionalStereotypes.add("too sensitive");
         emotionalStereotypes.add("are naturally irrational");
         emotionalStereotypes.add("always dramatic");
-
-
-
-        emotionalStereotypes.add("Women are always nagging");
 
 
 return emotionalStereotypes;
@@ -296,10 +320,10 @@ return emotionalStereotypes;
 
     public static int calculateBiasScore(
             int appearanceCount,
-            int genderCount,
-            int emotionalCount,
+          int  emotionalCount,
+          int  genderCount,
             int skillCount,
-            int flaggedCount) {
+           int flaggedCount) {
 
         if (genderCount == 0) {
             return 0;
@@ -307,10 +331,12 @@ return emotionalStereotypes;
 
         int finalBiasCount = flaggedCount * 2;
 
-        if (appearanceCount > 0 && skillCount == 0 && emotionalCount > 0 && skillCount == 0) {
+        if (appearanceCount > 0 && skillCount == 0) {
             finalBiasCount++;
         }
-
+        if (appearanceCount > 0 && skillCount == 0) {
+            finalBiasCount++;
+        }
         return finalBiasCount;
     }
 
@@ -359,6 +385,7 @@ return emotionalStereotypes;
 
 
 }
+
 
 
 
