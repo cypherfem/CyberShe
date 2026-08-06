@@ -52,7 +52,8 @@ public class Main {
         int abilityPhrasecount = checkPhrases(userText, abilityPhrasesgen, "Emotional stereotype");
         int beautyPhrasecount = checkPhrases(userText, beautyPhrasesgen, "Emotional stereotype");
         int domesticPhrasesCount= checkPhrases(userText, domesticPhrasesgen, "Emotional stereotype");
-        int generalizedPhrasecount = checkPhrases(userText, gener)
+        int generalizedPhrasecount = checkPhrases(userText, generalizeStereotypes, "hi");
+
         System.out.println("-- BIAS AGAINST WOMEN COUNT ---");
         System.out.println("Appearance count: " + appearanceCount);
         System.out.println("Potentially biased word count: " + flaggedCount);
@@ -64,15 +65,19 @@ public class Main {
         System.out.println("Appearance stereotype against women phrase count: " + beautyPhrasecount);
         System.out.println("Leadership stereotype against women phrase count: " + leadershipPhraseCount);
         System.out.println("Domestic stereotype against women phrase count: " + domesticPhrasesCount);
+        System.out.println("Generalized stereotype against women phrase count: " + domesticPhrasesCount);
 
 
         int finalBiasCount = calculateBiasScore(
+         appearanceCount,
+        emotionalPhrasecount,
+        beautyPhrasecount,
+         abilityPhrasecount,
+                domesticPhrasesCount,
                 appearanceCount,
-                emotionalCount,
-                genderCount,
-                skillCount,
-                flaggedCount
-        );
+         genderCount,
+         skillCount,
+         flaggedCount);
 
         System.out.println("Bias score: " + finalBiasCount);
 
@@ -184,6 +189,23 @@ public class Main {
         return String.join(" ", newText);
     }
 
+    public static ArrayList<String> createGeneralizationphrases() {
+        ArrayList<String> generalizeStereotypes = new ArrayList<String>();
+
+        generalizeStereotypes.add("always");
+        generalizeStereotypes.add("naturally");
+        generalizeStereotypes.add("usually");
+        generalizeStereotypes.add("all");
+        generalizeStereotypes.add("meant to");
+        generalizeStereotypes.add("all women");
+        generalizeStereotypes.add("all girls");
+        generalizeStereotypes.add("every girl");
+        generalizeStereotypes.add("every woman");
+        generalizeStereotypes.add("never");
+        generalizeStereotypes.add("typically");
+
+        return generalizeStereotypes;
+    }
 
 
 
@@ -281,22 +303,6 @@ return emotionalStereotypes;
         return abiltySterotypes;
     }
 
-    public static ArrayList<String> createGeneralizationphrases() {
-        ArrayList<String> generalizeStereotypes = new ArrayList<String>();
-        generalizeStereotypes.add("always");
-        generalizeStereotypes.add("naturally");
-        generalizeStereotypes.add("usually");
-        generalizeStereotypes.add("all");
-        generalizeStereotypes.add("meant to");
-        generalizeStereotypes.add("all women");
-        generalizeStereotypes.add("all girls");
-        generalizeStereotypes.add("every girl");
-        generalizeStereotypes.add("every woman");
-        generalizeStereotypes.add("never");
-        generalizeStereotypes.add("typically");
-
-        return generalizeStereotypes;
-    }
 
         public static ArrayList<String> createPowerwords() {
 
