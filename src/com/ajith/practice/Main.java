@@ -37,6 +37,10 @@ public class Main {
         ArrayList<String> appearanceWords = createAppearancewords();
         ArrayList<String> genderWords = createGenderwords();
         ArrayList<String> emotionalPhrasesgen = createEmotionalphrases();
+        ArrayList<String> leadershipPhrasesgen = leadershipPhrases();
+        ArrayList<String> beautyPhrasesgen = createBeautyphrases();
+        ArrayList<String> domesticPhrasesgen = createDomesticphrases();
+        ArrayList<String> abilityPhrasesgen = abilityPhrases();
 
         int appearanceCount = checkWords(userWords, appearanceWords, "Appearance");
         int emotionalCount = checkWords(userWords, emotionalWords, "Emotional/support/nurturing");
@@ -44,6 +48,9 @@ public class Main {
         int genderCount = checkWords(userWords, genderWords, "Gender pronouns");
         int flaggedCount = checkWords(userWords, flaggedWords, "May be biased");
         int emotionalPhrasecount = checkPhrases(userText, emotionalPhrasesgen, "Emotional stereotype");
+        int leadershipPhraseCount = checkPhrases(userText, leadershipPhrasesgen, "Emotional stereotype");
+        int abilityPhrasecount = checkPhrases(userText, abilityPhrasesgen, "Emotional stereotype");
+        int beautyPhrasecount = checkPhrases(userText, beautyPhrasesgen, "Emotional stereotype");
 
         System.out.println("-- BIAS AGAINST WOMEN COUNT ---");
         System.out.println("Appearance count: " + appearanceCount);
@@ -51,7 +58,11 @@ public class Main {
         System.out.println("Emotional/support count: " + emotionalCount);
         System.out.println("Skill and Power count: " + skillCount);
         System.out.println("Gender pronoun count: " + genderCount);
-        System.out.println("Emotional stereotype against phrase count: " + emotionalPhrasecount);
+        System.out.println("Emotional stereotype against women phrase count: " + emotionalPhrasecount);
+        System.out.println("Ability stereotype against women phrase count: " + abilityPhrasecount);
+        System.out.println("Appearance stereotype against women phrase count: " + beautyPhrasecount);
+        System.out.println("Leadership stereotype against women phrase count: " + leadershipPhraseCount);
+
 
         int finalBiasCount = calculateBiasScore(
                 appearanceCount,
