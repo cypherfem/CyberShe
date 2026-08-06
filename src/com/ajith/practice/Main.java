@@ -51,7 +51,8 @@ public class Main {
         int leadershipPhraseCount = checkPhrases(userText, leadershipPhrasesgen, "Emotional stereotype");
         int abilityPhrasecount = checkPhrases(userText, abilityPhrasesgen, "Emotional stereotype");
         int beautyPhrasecount = checkPhrases(userText, beautyPhrasesgen, "Emotional stereotype");
-
+        int domesticPhrasesCount= checkPhrases(userText, domesticPhrasesgen, "Emotional stereotype");
+        int generalizedPhrasecount = checkPhrases(userText, gener)
         System.out.println("-- BIAS AGAINST WOMEN COUNT ---");
         System.out.println("Appearance count: " + appearanceCount);
         System.out.println("Potentially biased word count: " + flaggedCount);
@@ -62,6 +63,7 @@ public class Main {
         System.out.println("Ability stereotype against women phrase count: " + abilityPhrasecount);
         System.out.println("Appearance stereotype against women phrase count: " + beautyPhrasecount);
         System.out.println("Leadership stereotype against women phrase count: " + leadershipPhraseCount);
+        System.out.println("Domestic stereotype against women phrase count: " + domesticPhrasesCount);
 
 
         int finalBiasCount = calculateBiasScore(
@@ -279,6 +281,23 @@ return emotionalStereotypes;
         return abiltySterotypes;
     }
 
+    public static ArrayList<String> createGeneralizationphrases() {
+        ArrayList<String> generalizeStereotypes = new ArrayList<String>();
+        generalizeStereotypes.add("always");
+        generalizeStereotypes.add("naturally");
+        generalizeStereotypes.add("usually");
+        generalizeStereotypes.add("all");
+        generalizeStereotypes.add("meant to");
+        generalizeStereotypes.add("all women");
+        generalizeStereotypes.add("all girls");
+        generalizeStereotypes.add("every girl");
+        generalizeStereotypes.add("every woman");
+        generalizeStereotypes.add("never");
+        generalizeStereotypes.add("typically");
+
+        return generalizeStereotypes;
+    }
+
         public static ArrayList<String> createPowerwords() {
 
         ArrayList<String> powerWords = new ArrayList<String>();
@@ -397,7 +416,11 @@ return emotionalStereotypes;
 
     public static int calculateBiasScore(
             int appearanceCount,
-          int  emotionalCount,
+            int emotionalPhrasecount,
+            int  beautyPhrasecount,
+            int  abilityPhrasecount,
+            int domesticPhrasecount,
+            int appearancePhrasecount,
           int  genderCount,
             int skillCount,
            int flaggedCount) {
@@ -406,7 +429,7 @@ return emotionalStereotypes;
             return 0;
         }
 
-        int finalBiasCount = flaggedCount * 2;
+        int finalBiasCount = flaggedCount * 2 + emotionalPhrasecount * 3 + beautyPhrasecount *3+ abilityPhrasecount *3 + domesticPhrasecount * 3+ appearancePhrasecount * 2;
 
 
         if (appearanceCount > 0 && skillCount == 0) {
