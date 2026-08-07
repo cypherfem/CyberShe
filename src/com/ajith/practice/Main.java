@@ -41,6 +41,8 @@ public class Main {
         ArrayList<String> beautyPhrasesgen = createBeautyphrases();
         ArrayList<String> domesticPhrasesgen = createDomesticphrases();
         ArrayList<String> abilityPhrasesgen = abilityPhrases();
+        ArrayList<String> generalizeStereotypes = createGeneralizationphrases();
+
 
         int appearanceCount = checkWords(userWords, appearanceWords, "Appearance");
         int emotionalCount = checkWords(userWords, emotionalWords, "Emotional/support/nurturing");
@@ -52,7 +54,9 @@ public class Main {
         int abilityPhrasecount = checkPhrases(userText, abilityPhrasesgen, "Emotional stereotype");
         int beautyPhrasecount = checkPhrases(userText, beautyPhrasesgen, "Emotional stereotype");
         int domesticPhrasesCount= checkPhrases(userText, domesticPhrasesgen, "Emotional stereotype");
-        int generalizedPhrasecount = checkPhrases(userText, generalizeStereotypes, "hi");
+        int generalizedPhrasecount = checkPhrases(userText, generalizeStereotypes, "Generalize stereotype");
+
+        boolean generalizationDetected = generalizedPhrasecount  > 0;
 
         System.out.println("-- BIAS AGAINST WOMEN COUNT ---");
         System.out.println("Appearance count: " + appearanceCount);
@@ -77,7 +81,8 @@ public class Main {
                 appearanceCount,
          genderCount,
          skillCount,
-         flaggedCount);
+         flaggedCount,
+                generalizedPhrasecount);
 
         System.out.println("Bias score: " + finalBiasCount);
 
@@ -429,13 +434,14 @@ return emotionalStereotypes;
             int appearancePhrasecount,
           int  genderCount,
             int skillCount,
-           int flaggedCount) {
+           int flaggedCount,
+            int generalizeCount) {
 
         if (genderCount == 0) {
             return 0;
         }
 
-        int finalBiasCount = flaggedCount * 2 + emotionalPhrasecount * 3 + beautyPhrasecount *3+ abilityPhrasecount *3 + domesticPhrasecount * 3+ appearancePhrasecount * 2;
+        int finalBiasCount = flaggedCount * 2 + emotionalPhrasecount * 3 + beautyPhrasecount *3+ abilityPhrasecount *3 + domesticPhrasecount * 3+ appearancePhrasecount * 2 + generalizeCount * 2;
 
 
         if (appearanceCount > 0 && skillCount == 0) {
