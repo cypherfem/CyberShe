@@ -50,11 +50,11 @@ public class Main {
         int genderCount = checkWords(userWords, genderWords, "Gender pronouns");
         int flaggedCount = checkWords(userWords, flaggedWords, "May be biased");
         int emotionalPhrasecount = checkPhrases(userText, emotionalPhrasesgen, "Emotional stereotype");
-        int leadershipPhraseCount = checkPhrases(userText, leadershipPhrasesgen, "Emotional stereotype");
-        int abilityPhrasecount = checkPhrases(userText, abilityPhrasesgen, "Emotional stereotype");
-        int beautyPhrasecount = checkPhrases(userText, beautyPhrasesgen, "Emotional stereotype");
-        int domesticPhrasesCount= checkPhrases(userText, domesticPhrasesgen, "Emotional stereotype");
-        int generalizedPhrasecount = checkPhrases(userText, generalizeStereotypes, "Generalize stereotype");
+        int leadershipPhraseCount = checkPhrases(userText, leadershipPhrasesgen, "Leadership stereotype");
+        int abilityPhrasecount = checkPhrases(userText, abilityPhrasesgen, "Ability stereotype");
+        int beautyPhrasecount = checkPhrases(userText, beautyPhrasesgen, "Appearance ereotype");
+        int domesticPhrasesCount= checkPhrases(userText, domesticPhrasesgen, "Domestic stereotype");
+        int generalizedPhrasecount = checkPhrases(userText, generalizeStereotypes, "Generalization stereotype");
 
         boolean generalizationDetected = generalizedPhrasecount  > 0;
 
@@ -69,20 +69,21 @@ public class Main {
         System.out.println("Appearance stereotype against women phrase count: " + beautyPhrasecount);
         System.out.println("Leadership stereotype against women phrase count: " + leadershipPhraseCount);
         System.out.println("Domestic stereotype against women phrase count: " + domesticPhrasesCount);
-        System.out.println("Generalized stereotype against women phrase count: " + domesticPhrasesCount);
+        System.out.println("Generalized stereotype against women phrase count: " + generalizedPhrasecount);
 
 
         int finalBiasCount = calculateBiasScore(
-         appearanceCount,
-        emotionalPhrasecount,
-        beautyPhrasecount,
-         abilityPhrasecount,
-                domesticPhrasesCount,
                 appearanceCount,
-         genderCount,
-         skillCount,
-         flaggedCount,
-                generalizedPhrasecount);
+                emotionalPhrasecount,
+                beautyPhrasecount,
+                abilityPhrasecount,
+                leadershipPhraseCount,
+                domesticPhrasesCount,
+                genderCount,
+                skillCount,
+                flaggedCount,
+                generalizedPhrasecount
+        );
 
         System.out.println("Bias score: " + finalBiasCount);
 
@@ -201,15 +202,39 @@ public class Main {
         generalizeStereotypes.add("naturally");
         generalizeStereotypes.add("usually");
         generalizeStereotypes.add("all");
+        generalizeStereotypes.add("women are");
+        generalizeStereotypes.add("girls are");
         generalizeStereotypes.add("meant to");
         generalizeStereotypes.add("all women");
         generalizeStereotypes.add("all girls");
         generalizeStereotypes.add("every girl");
         generalizeStereotypes.add("every woman");
         generalizeStereotypes.add("never");
+        generalizeStereotypes.add("women are born to");
+        generalizeStereotypes.add("just how women are");
+        generalizeStereotypes.add("girls are born to");
+        generalizeStereotypes.add("women are biologically hardwired to");
+        generalizeStereotypes.add("women are hardwired to");
+        generalizeStereotypes.add("mothers naturally");
         generalizeStereotypes.add("typically");
 
         return generalizeStereotypes;
+    }
+
+    public static ArrayList<String> createNegation() {
+        ArrayList<String> negationList = new ArrayList<String>();
+
+        negationList.add("can't");
+        negationList.add("shouldn't");
+        negationList.add("should not");
+        negationList.add("incapable");
+        negationList.add("couldn't");
+        negationList.add("could not");
+        negationList.add("should not");
+        negationList.add("not");
+        negationList.add("never");
+
+        return negationList;
     }
 
 
@@ -284,6 +309,9 @@ return emotionalStereotypes;
         leadershipSterotypes.add("not capable of leading");
         leadershipSterotypes.add("must be below man");
         leadershipSterotypes.add("too emotional to lead");
+        leadershipSterotypes.add("women can't be a bosses");
+
+
 
 
 
@@ -428,20 +456,21 @@ return emotionalStereotypes;
     public static int calculateBiasScore(
             int appearanceCount,
             int emotionalPhrasecount,
-            int  beautyPhrasecount,
-            int  abilityPhrasecount,
+            int beautyPhrasecount,
+            int abilityPhrasecount,
+            int leadershipPhraseCount,
             int domesticPhrasecount,
-            int appearancePhrasecount,
-          int  genderCount,
+            int genderCount,
             int skillCount,
-           int flaggedCount,
-            int generalizeCount) {
+            int flaggedCount,
+            int generalizeCount
+           ) {
 
         if (genderCount == 0) {
             return 0;
         }
 
-        int finalBiasCount = flaggedCount * 2 + emotionalPhrasecount * 3 + beautyPhrasecount *3+ abilityPhrasecount *3 + domesticPhrasecount * 3+ appearancePhrasecount * 2 + generalizeCount * 2;
+        int finalBiasCount = flaggedCount * 2 + emotionalPhrasecount * 3 + beautyPhrasecount *3+ abilityPhrasecount *3 + domesticPhrasecount * 3+ leadershipPhraseCount * 3 + generalizeCount * 2;
 
 
         if (appearanceCount > 0 && skillCount == 0) {
