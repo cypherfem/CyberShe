@@ -169,9 +169,37 @@ public class Main {
         return count;
 
     }
+//she is not very capable
+    public static boolean dectectNegitiveskills(ArrayList negationList, ArrayList powerList, String userText) {
+        String[] userWords = userText.split(" ");
+        int powerWordindex = -1;
+        int negitiveWordindex = -1;
+
+        for (int i = 0; i < userWords.length; i++) {
 
 
-    public static String rewriteWords(String userText) {
+            if (powerList.contains(userWords[i])) {
+                 powerWordindex = i;
+            }
+            for (int j = 0; j < i ; j++) {
+
+                if (negationList.contains(userWords[j])) {
+                    negitiveWordindex = j;
+                }
+                }
+            if (powerWordindex != -1 && negitiveWordindex != -1) {
+              int differenceVal = powerWordindex - negitiveWordindex;
+                if (differenceVal > 0 && differenceVal <=3) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+
+        public static String rewriteWords(String userText) {
         int rewriteCount = 0;
         String[] newText = userText.split(" ");
 
@@ -227,6 +255,7 @@ public class Main {
         negationList.add("can't");
         negationList.add("shouldn't");
         negationList.add("should not");
+        negationList.add("not very");
         negationList.add("incapable");
         negationList.add("couldn't");
         negationList.add("could not");
@@ -332,7 +361,7 @@ return emotionalStereotypes;
         abiltySterotypes.add("can't understand technology");
 
 
-
+//hi there how r u
         return abiltySterotypes;
     }
 
