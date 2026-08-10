@@ -42,6 +42,10 @@ public class Main {
         ArrayList<String> domesticPhrasesgen = createDomesticphrases();
         ArrayList<String> abilityPhrasesgen = abilityPhrases();
         ArrayList<String> generalizeStereotypes = createGeneralizationphrases();
+        ArrayList<String> negationList = createNegation();
+        ArrayList<String> negativeSkillWords = createNegativeSkillWords();
+
+
 
 
         int appearanceCount = checkWords(userWords, appearanceWords, "Appearance");
@@ -54,9 +58,12 @@ public class Main {
         int abilityPhrasecount = checkPhrases(userText, abilityPhrasesgen, "Ability stereotype");
         int beautyPhrasecount = checkPhrases(userText, beautyPhrasesgen, "Appearance ereotype");
         int domesticPhrasesCount= checkPhrases(userText, domesticPhrasesgen, "Domestic stereotype");
+        int negativeSkillWordCount =checkWords(userWords, negativeSkillWords, "Negative skill");
         int generalizedPhrasecount = checkPhrases(userText, generalizeStereotypes, "Generalization stereotype");
 
-        boolean generalizationDetected = generalizedPhrasecount  > 0;
+         boolean isNegative =  dectectNegitiveskills(negationList,  powerWords, userText);
+
+            boolean generalizationDetected = generalizedPhrasecount  > 0;
 
         System.out.println("-- BIAS AGAINST WOMEN COUNT ---");
         System.out.println("Appearance count: " + appearanceCount);
@@ -70,6 +77,9 @@ public class Main {
         System.out.println("Leadership stereotype against women phrase count: " + leadershipPhraseCount);
         System.out.println("Domestic stereotype against women phrase count: " + domesticPhrasesCount);
         System.out.println("Generalized stereotype against women phrase count: " + generalizedPhrasecount);
+        System.out.println("Generalized stereotype against women phrase count: " + generalizedPhrasecount);
+
+        System.out.println("Negative skill meaning found: " + isNegative);
 
 
         int finalBiasCount = calculateBiasScore(
@@ -82,7 +92,9 @@ public class Main {
                 genderCount,
                 skillCount,
                 flaggedCount,
-                generalizedPhrasecount
+                generalizedPhrasecount,
+                negativeSkillWordCount,
+                isNegative
         );
 
         System.out.println("Bias score: " + finalBiasCount);
@@ -94,7 +106,9 @@ public class Main {
                 emotionalCount,
                 skillCount,
                 flaggedCount,
-                genderCount
+                genderCount,
+                isNegative,
+                negativeSkillWordCount
         );
 
         System.out.println();
@@ -170,20 +184,20 @@ public class Main {
 
     }
 //she is not very capable
-    public static boolean dectectNegitiveskills(ArrayList negationList, ArrayList powerList, String userText) {
+    public static boolean dectectNegitiveskills(ArrayList<String> negationList, ArrayList<String> powerList, String userText) {
         String[] userWords = userText.split(" ");
         int powerWordindex = -1;
         int negitiveWordindex = -1;
 
         for (int i = 0; i < userWords.length; i++) {
+            String currentWord = userWords[i].replaceAll("[^a-z']", "");
 
-
-            if (powerList.contains(userWords[i])) {
+            if (powerList.contains(currentWord)) {
                  powerWordindex = i;
             }
             for (int j = 0; j < i ; j++) {
-
-                if (negationList.contains(userWords[j])) {
+                String prevWord = userWords[j].replaceAll("[^a-z']", "");
+                if (negationList.contains(prevWord)) {
                     negitiveWordindex = j;
                 }
                 }
@@ -253,13 +267,9 @@ public class Main {
         ArrayList<String> negationList = new ArrayList<String>();
 
         negationList.add("can't");
-        negationList.add("shouldn't");
-        negationList.add("should not");
-        negationList.add("not very");
         negationList.add("incapable");
         negationList.add("couldn't");
-        negationList.add("could not");
-        negationList.add("should not");
+        negationList.add("shouldn't");
         negationList.add("not");
         negationList.add("never");
 
@@ -279,6 +289,16 @@ public class Main {
         appearanceWords.add("attractive");
         appearanceWords.add("chick");
         return appearanceWords;
+    }
+
+    public static ArrayList<String> createNegativeSkillWords() {
+        ArrayList<String> negativeSkillWords = new ArrayList<>();
+
+        negativeSkillWords.add("incapable");
+        negativeSkillWords.add("incompetent");
+        negativeSkillWords.add("unqualified");
+
+        return negativeSkillWords;
     }
 
     public static ArrayList<String> createEmotionalphrases() {
@@ -342,15 +362,14 @@ return emotionalStereotypes;
 
 
 
-
-
         return leadershipSterotypes;
     }
+
 
     public static ArrayList<String> abilityPhrases() {
 
         ArrayList<String> abiltySterotypes = new ArrayList<String>();
-        abiltySterotypes.add("can't be in STEM");
+        abiltySterotypes.add("can't be in stem");
         abiltySterotypes.add("can't beat a man");
         abiltySterotypes.add("can't play chess");
         abiltySterotypes.add("not smart enough");
@@ -492,19 +511,26 @@ return emotionalStereotypes;
             int genderCount,
             int skillCount,
             int flaggedCount,
-            int generalizeCount
+            int generalizeCount,
+            int negativeSkillWordCount,
+            boolean isNegative
            ) {
 
         if (genderCount == 0) {
             return 0;
         }
 
-        int finalBiasCount = flaggedCount * 2 + emotionalPhrasecount * 3 + beautyPhrasecount *3+ abilityPhrasecount *3 + domesticPhrasecount * 3+ leadershipPhraseCount * 3 + generalizeCount * 2;
+        int finalBiasCount = flaggedCount * 2 + emotionalPhrasecount * 3 + beautyPhrasecount *3+ abilityPhrasecount *3 + domesticPhrasecount * 3+ leadershipPhraseCount * 3 + generalizeCount * 2 + negativeSkillWordCount * 3;
 
 
         if (appearanceCount > 0 && skillCount == 0) {
             finalBiasCount++;
         }
+
+        if (isNegative) {
+            finalBiasCount += 3;
+        }
+
         return finalBiasCount;
     }
 
@@ -524,7 +550,9 @@ return emotionalStereotypes;
             int emotionalCount,
             int skillCount,
             int flaggedCount,
-            int genderCount) {
+            int genderCount,
+            boolean isNeg,
+            int negativeSkillWordCount) {
 
         if (genderCount == 0) {
             return "Diagnosis: No reference to women was detected.";
@@ -536,6 +564,10 @@ return emotionalStereotypes;
 
         if (appearanceCount > 0 && skillCount == 0) {
             return "Diagnosis: The sentence focuses on appearance without mentioning skill or intellect.";
+        }
+
+        if (isNegative || negativeSkillWordCount > 0) {
+            return "Diagnosis: The sentence negatively describes a woman's skill or ability.";
         }
 
         if (skillCount > 0) {
