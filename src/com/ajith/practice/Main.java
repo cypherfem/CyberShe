@@ -44,6 +44,8 @@ public class Main {
         ArrayList<String> generalizeStereotypes = createGeneralizationphrases();
         ArrayList<String> negationList = createNegation();
         ArrayList<String> negativeSkillWords = createNegativeSkillWords();
+        ArrayList<String> rejectStereotypeslist = recjectSterotypes();
+
 
 
 
@@ -57,6 +59,7 @@ public class Main {
         int leadershipPhraseCount = checkPhrases(userText, leadershipPhrasesgen, "Leadership stereotype");
         int abilityPhrasecount = checkPhrases(userText, abilityPhrasesgen, "Ability stereotype");
         int beautyPhrasecount = checkPhrases(userText, beautyPhrasesgen, "Appearance ereotype");
+        int rejectPhraseCount = checkPhrases(userText, rejectStereotypeslist, "Rejected stereotype");
         int domesticPhrasesCount= checkPhrases(userText, domesticPhrasesgen, "Domestic stereotype");
         int negativeSkillWordCount =checkWords(userWords, negativeSkillWords, "Negative skill");
         int generalizedPhrasecount = checkPhrases(userText, generalizeStereotypes, "Generalization stereotype");
@@ -64,6 +67,7 @@ public class Main {
          boolean isNegative =  dectectNegitiveskills(negationList,  powerWords, userText);
 
             boolean generalizationDetected = generalizedPhrasecount  > 0;
+            boolean stereotypeRejected = rejectPhraseCount > 0;
 
         System.out.println("-- BIAS AGAINST WOMEN COUNT ---");
         System.out.println("Appearance count: " + appearanceCount);
@@ -80,6 +84,8 @@ public class Main {
         System.out.println("Generalized stereotype against women phrase count: " + generalizedPhrasecount);
 
         System.out.println("Negative skill meaning found: " + isNegative);
+        System.out.println("Stereotype rejected found: " + stereotypeRejected );
+
 
 
         int finalBiasCount = calculateBiasScore(
@@ -94,7 +100,8 @@ public class Main {
                 flaggedCount,
                 generalizedPhrasecount,
                 negativeSkillWordCount,
-                isNegative
+                isNegative,
+                rejectPhraseCount
         );
 
         System.out.println("Bias score: " + finalBiasCount);
@@ -102,19 +109,32 @@ public class Main {
         String biasLevel = getBiasLevel(finalBiasCount);
 
         String diagnosis = printDiagnosis(
-                appearanceCount,
-                emotionalCount,
-                skillCount,
-                flaggedCount,
-                genderCount,
-                isNegative,
-                negativeSkillWordCount
+         appearanceCount,
+         emotionalCount,
+         skillCount,
+         flaggedCount,
+         genderCount,
+         isNegative,
+         negativeSkillWordCount,
+        stereotypeRejected,
+         emotionalPhrasecount,
+         leadershipPhraseCount,
+         abilityPhrasecount,
+         domesticPhrasesCount,
+                beautyPhrasecount,
+         generalizedPhrasecount
         );
 
         System.out.println();
 
 
-        String newText = rewriteWords(userText);
+        String newText = rewriteWords( userText,
+        stereotypeRejected,
+         leadershipPhraseCount,
+        abilityPhrasecount,
+         domesticPhrasesCount,
+         beautyPhrasecount,
+         emotionalPhrasecount);
 
         StringBuilder results = new StringBuilder();
 
@@ -213,28 +233,40 @@ public class Main {
 
 
 
-        public static String rewriteWords(String userText) {
-        int rewriteCount = 0;
-        String[] newText = userText.split(" ");
+    public static String rewriteWords(
+            String userText,
+            boolean stereotypeRejected,
+            int leadershipPhraseCount,
+            int abilityPhrasecount,
+            int domesticPhrasesCount,
+            int beautyPhrasecount,
+            int emotionalPhrasecount) {
 
-        for (int i = 0; i < newText.length; i++) {
-            String cleanWords = newText[i].replaceAll("[^a-z']", "");
-            if (cleanWords.equals("chick")) {
-                rewriteCount++;
-                newText[i] = "woman";
-            }
-
-            if (cleanWords.equals("bossy")) {
-                rewriteCount++;
-                newText[i] = "assertive";
-            }
+        if (stereotypeRejected) {
+            return userText;
         }
 
-        if (rewriteCount > 0) {
-            System.out.println("Rewrite changes made: " + rewriteCount);
+        if (leadershipPhraseCount > 0) {
+            return "Leadership ability should be judged by individual skills and experience, not gender.";
         }
 
-        return String.join(" ", newText);
+        if (abilityPhrasecount > 0) {
+            return "A person's abilities should be judged individually rather than assumed based on gender.";
+        }
+
+        if (domesticPhrasesCount > 0) {
+            return "People should be free to choose their responsibilities and roles regardless of gender.";
+        }
+
+        if (beautyPhrasecount > 0) {
+            return "A person's value should not be determined primarily by appearance or gender.";
+        }
+
+        if (emotionalPhrasecount > 0) {
+            return "Emotional traits vary between individuals and should not be assumed based on gender.";
+        }
+
+        return userText;
     }
 
     public static ArrayList<String> createGeneralizationphrases() {
@@ -243,9 +275,6 @@ public class Main {
         generalizeStereotypes.add("always");
         generalizeStereotypes.add("naturally");
         generalizeStereotypes.add("usually");
-        generalizeStereotypes.add("all");
-        generalizeStereotypes.add("women are");
-        generalizeStereotypes.add("girls are");
         generalizeStereotypes.add("meant to");
         generalizeStereotypes.add("all women");
         generalizeStereotypes.add("all girls");
@@ -365,7 +394,16 @@ return emotionalStereotypes;
         return leadershipSterotypes;
     }
 
+    public static ArrayList<String> recjectSterotypes() {
 
+        ArrayList<String> rejectSterotypes = new ArrayList<String>();
+        rejectSterotypes.add("i disagree");
+        rejectSterotypes.add("people shouldn't assume that");
+        rejectSterotypes.add("this stereotype is not true");
+        rejectSterotypes.add("this stereotype perpetuates ");
+
+        return rejectSterotypes;
+    }
     public static ArrayList<String> abilityPhrases() {
 
         ArrayList<String> abiltySterotypes = new ArrayList<String>();
@@ -513,14 +551,15 @@ return emotionalStereotypes;
             int flaggedCount,
             int generalizeCount,
             int negativeSkillWordCount,
-            boolean isNegative
+            boolean isNegative,
+            int rejectSteroCounter
            ) {
 
         if (genderCount == 0) {
             return 0;
         }
 
-        int finalBiasCount = flaggedCount * 2 + emotionalPhrasecount * 3 + beautyPhrasecount *3+ abilityPhrasecount *3 + domesticPhrasecount * 3+ leadershipPhraseCount * 3 + generalizeCount * 2 + negativeSkillWordCount * 3;
+        int finalBiasCount = flaggedCount * 2 + emotionalPhrasecount * 3 + beautyPhrasecount *3 + abilityPhrasecount *3 + domesticPhrasecount * 3+ leadershipPhraseCount * 3 + generalizeCount * 2 + negativeSkillWordCount * 3;
 
 
         if (appearanceCount > 0 && skillCount == 0) {
@@ -529,6 +568,10 @@ return emotionalStereotypes;
 
         if (isNegative) {
             finalBiasCount += 3;
+        }
+
+        if (rejectSteroCounter > 0) {
+            return 0;
         }
 
         return finalBiasCount;
@@ -552,21 +595,53 @@ return emotionalStereotypes;
             int flaggedCount,
             int genderCount,
             boolean isNeg,
-            int negativeSkillWordCount) {
+            int negativeSkillWordCount,
+            boolean stereotypeRejected,
+            int emotionalPhrasecount,
+            int leadershipPhraseCount,
+            int abilityPhrasecount,
+            int domesticPhraseCount,
+            int beautyPhrasecount,
+            int generalizedPhrasecount) {
 
         if (genderCount == 0) {
             return "Diagnosis: No reference to women was detected.";
         }
+        if (stereotypeRejected) {
+            return "Diagnosis: The sentence is good, it rejects stereotypes against women.";
+        }
 
-        if (flaggedCount > 0) {
-            return "Diagnosis: The sentence contains wording that may negatively stereotype women.";
+
+
+        if (leadershipPhraseCount > 0) {
+            return "Diagnosis: The sentence contains a leadership stereotype about women.";
+        }
+
+        if (abilityPhrasecount > 0) {
+            return "Diagnosis: The sentence contains an ability stereotype about women.";
+        }
+
+        if (domesticPhraseCount > 0) {
+            return "Diagnosis: The sentence contains a domestic-role stereotype about women.";
+        }
+
+        if (beautyPhrasecount > 0) {
+            return "Diagnosis: The sentence contains an appearance stereotype about women.";
+        }
+
+        if (emotionalPhrasecount > 0) {
+            return "Diagnosis: The sentence contains an emotional stereotype about women.";
+        }
+
+        if (generalizedPhrasecount > 0) {
+            return "Diagnosis: The sentence makes a generalization about women.";
         }
 
         if (appearanceCount > 0 && skillCount == 0) {
             return "Diagnosis: The sentence focuses on appearance without mentioning skill or intellect.";
         }
 
-        if (isNegative || negativeSkillWordCount > 0) {
+        if (isNeg|| negativeSkillWordCount > 0) {
             return "Diagnosis: The sentence negatively describes a woman's skill or ability.";
         }
 
@@ -577,9 +652,12 @@ return emotionalStereotypes;
         if (emotionalCount > 0) {
             return "Diagnosis: The sentence contains emotional or nurturing language, but that alone does not prove bias.";
         }
-
+        if (flaggedCount > 0) {
+            return "Diagnosis: The sentence contains wording that may negatively stereotype women.";
+        }
         return "Diagnosis: No obvious bias was detected using the current word lists.";
     }
+
 
 
 
