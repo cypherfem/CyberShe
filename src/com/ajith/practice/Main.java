@@ -1,5 +1,5 @@
 package com.ajith.practice;
-
+import com.openai.client.OpenAIClient;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -81,7 +81,6 @@ public class Main {
         System.out.println("Leadership stereotype against women phrase count: " + leadershipPhraseCount);
         System.out.println("Domestic stereotype against women phrase count: " + domesticPhrasesCount);
         System.out.println("Generalized stereotype against women phrase count: " + generalizedPhrasecount);
-        System.out.println("Generalized stereotype against women phrase count: " + generalizedPhrasecount);
 
         System.out.println("Negative skill meaning found: " + isNegative);
         System.out.println("Stereotype rejected found: " + stereotypeRejected );
@@ -128,13 +127,20 @@ public class Main {
         System.out.println();
 
 
-        String newText = rewriteWords( userText,
-        stereotypeRejected,
-         leadershipPhraseCount,
-        abilityPhrasecount,
-         domesticPhrasesCount,
-         beautyPhrasecount,
-         emotionalPhrasecount);
+        String newText = rewriteWords(
+                userText,
+                stereotypeRejected,
+                leadershipPhraseCount,
+                abilityPhrasecount,
+                domesticPhrasesCount,
+                beautyPhrasecount,
+                emotionalPhrasecount,
+                isNegative,
+                negativeSkillWordCount,
+                generalizedPhrasecount,
+                flaggedCount,
+                genderCount
+        );
 
         StringBuilder results = new StringBuilder();
 
@@ -240,7 +246,16 @@ public class Main {
             int abilityPhrasecount,
             int domesticPhrasesCount,
             int beautyPhrasecount,
-            int emotionalPhrasecount) {
+            int emotionalPhrasecount,
+            boolean isNegative,
+            int negativeSkillWordCount,
+            int generalizedPhrasecount,
+            int flaggedCount,
+            int genderCount) {
+
+        if (genderCount == 0) {
+            return userText;
+        }
 
         if (stereotypeRejected) {
             return userText;
@@ -266,7 +281,20 @@ public class Main {
             return "Emotional traits vary between individuals and should not be assumed based on gender.";
         }
 
+        if (isNegative || negativeSkillWordCount > 0) {
+            return "A person's skills and abilities should be judged individually rather than assumed based on gender.";
+        }
+
+        if (generalizedPhrasecount > 0) {
+            return "People should be judged as individuals rather than generalized based on gender.";
+        }
+
+        if (flaggedCount > 0) {
+            return "Consider describing the person's behavior more specifically without relying on gendered stereotypes.";
+        }
+
         return userText;
+
     }
 
     public static ArrayList<String> createGeneralizationphrases() {
@@ -354,7 +382,7 @@ return emotionalStereotypes;
         domesticSterotypes.add("naturally want kids");
         domesticSterotypes.add("serves their husband");
         domesticSterotypes.add("make me a sandwich");
-        domesticSterotypes.add("role  in the kitchen");
+        domesticSterotypes.add("role in the kitchen");
         domesticSterotypes.add("must take care of the children");
         domesticSterotypes.add("should stay at home");
         domesticSterotypes.add("should be a housewife");
@@ -387,7 +415,7 @@ return emotionalStereotypes;
         leadershipSterotypes.add("not capable of leading");
         leadershipSterotypes.add("must be below man");
         leadershipSterotypes.add("too emotional to lead");
-        leadershipSterotypes.add("women can't be a bosses");
+        leadershipSterotypes.add("women can't be bosses");
 
 
 
@@ -400,7 +428,7 @@ return emotionalStereotypes;
         rejectSterotypes.add("i disagree");
         rejectSterotypes.add("people shouldn't assume that");
         rejectSterotypes.add("this stereotype is not true");
-        rejectSterotypes.add("this stereotype perpetuates ");
+        rejectSterotypes.add("this stereotype perpetuates");
 
         return rejectSterotypes;
     }
@@ -426,7 +454,6 @@ return emotionalStereotypes;
         public static ArrayList<String> createPowerwords() {
 
         ArrayList<String> powerWords = new ArrayList<String>();
-        powerWords.add("skilled");
         powerWords.add("technical");
         powerWords.add("smart");
         powerWords.add("leader");
@@ -447,12 +474,10 @@ return emotionalStereotypes;
         powerWords.add("skilled");
         powerWords.add("lead");
         powerWords.add("code");
-        powerWords.add("problem solver");
         powerWords.add("genius");
         powerWords.add("determined");
         powerWords.add("determination");
         powerWords.add("grit");
-        powerWords.add("math");
         powerWords.add("technology");
         powerWords.add("confident");
         powerWords.add("boss");
@@ -471,7 +496,6 @@ return emotionalStereotypes;
         powerWords.add("programmers");
         powerWords.add("math");
         powerWords.add("physics");
-        powerWords.add("engineers");
         powerWords.add("coding");
 
         return powerWords;
