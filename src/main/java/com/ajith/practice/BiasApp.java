@@ -212,14 +212,17 @@ public class BiasApp extends Application {
             Image[] articles = {
                     new Image("file:src/images/news1.png"),
                     new Image("file:src/images/news2.png"),
-                    new Image("file:src/images/news3.png")
+                    new Image("file:src/images/news3.png"),
+                    new Image("file:src/images/news4.png"),
+                     new Image("file:src/images/news5.png")
+
 
            };
 
             ImageView newsView = new ImageView(articles[0]);
 
 
-            newsView.setFitWidth(600);
+            newsView.setFitWidth(450);
             newsView.setPreserveRatio(true);
             Image arrowImage = new Image("file:src/images/arrow.png");
 
@@ -234,8 +237,18 @@ public class BiasApp extends Application {
             newsPane.getChildren().add(newsView);
             newsPane.getChildren().add(nextButton);
             StackPane.setAlignment(nextButton, Pos.BOTTOM_RIGHT);
+            StackPane.setMargin(nextButton, new Insets(0, 40, 30, 40));
+
+            int[] currentArticle = {0};
+
+            nextButton.setOnAction(e -> {
 
 
+                if (currentArticle[0] < articles.length) {
+                    currentArticle[0]++;
+                    newsView.setImage(articles[currentArticle[0]]);
+                }
+            });
             amayaLayout.getChildren().add(newsPane);
 
 
@@ -283,8 +296,33 @@ public class BiasApp extends Application {
                 cyberFemplayer.play();
 
         });
+        Image womanIconImage =
+                new Image("file:src/images/news_icon.png");
 
-        womanosphere.setOnAction(actionEvent1 -> {
+        ImageView womanIconView =
+                new ImageView(newsIconImage);
+
+        womanIconView.setFitWidth(60);
+        womanIconView.setPreserveRatio(true);
+
+        Label womanLabel = new Label("news");
+
+        womanLabel.setStyle(
+                "-fx-background-color: transparent;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-size: 16px;"
+        );
+
+        VBox womanIconBox = new VBox(10);
+        womanIconBox.setAlignment(Pos.CENTER_LEFT);
+
+        womanIconBox.getChildren().addAll(
+                womanIconView,
+                womanLabel
+        );
+
+        desktopIcons.getChildren().add(womanIconBox);
+        womanosphere.setOnMouseClicked(actionEvent1 -> {
 
             Image womansphereImage = new Image("file:src/images/home.png");
             ImageView womanSphereview = new ImageView(womansphereImage);
