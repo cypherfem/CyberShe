@@ -1,5 +1,6 @@
 package com.ajith.practice;
 
+import javafx.scene.control.ScrollPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.ImageCursor;
@@ -10,7 +11,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -25,18 +25,14 @@ public class BiasApp extends Application {
 
 
        //buttons for laptop
-        Button analyzerApp = new Button("Bias Analyzer");
-        Button womanosphere = new Button("womanosphere");
 
 
         //creates a Vbox, to verticallly align the desktop icons, top to bottoms
         VBox desktopIcons = new VBox(10);
+        desktopIcons.setFillWidth(false);
 
-        //adding children (apps) into the desktopIcons Vbox
-        desktopIcons.getChildren().addAll(
-                analyzerApp,
-                womanosphere
-        );
+
+
 
 
         Image backgroundImage =
@@ -94,7 +90,6 @@ public class BiasApp extends Application {
 
         primaryStage.show();
 
-        // ---------- ANALYZER CONTROLS ----------
 
         TextArea sentenceBox = new TextArea();
         sentenceBox.setPromptText("Write a sentence to analyze...");
@@ -132,27 +127,38 @@ public class BiasApp extends Application {
                                 aiResult);
             }
         });
+        Image analyzerIconImage =
+                new Image("file:src/images/analyzer_icon.png");
 
+        ImageView analyzerIconView =
+                new ImageView(analyzerIconImage);
 
-        analyzerApp.setOnAction(actionEvent -> {
+        analyzerIconView.setFitWidth(60);
+        analyzerIconView.setPreserveRatio(true);
 
+        Label analyzerLabel = new Label("Bias Analyzer");
 
+        analyzerLabel.setStyle(
+                "-fx-text-fill: white;" +
+                        "-fx-font-size: 16px;"
+        );
 
+        VBox analyzerApps = new VBox(10);
 
+        analyzerApps.getChildren().addAll(
+                analyzerIconView,
+                analyzerLabel
+        );
 
+        analyzerApps.setAlignment(Pos.CENTER_LEFT);
+        desktopIcons.getChildren().add(analyzerApps);
 
-
+        analyzerApps.setOnMouseClicked(actionEvent -> {
 
             Button backButton = new Button("Back");
             Button xButton = new Button("X");
 
-
-
-
-
-
             VBox analyzerContents = new VBox(10);
-
 
             analyzerContents.getChildren().addAll(
                     sentenceBox,
@@ -237,7 +243,7 @@ public class BiasApp extends Application {
             newsPane.getChildren().add(newsView);
             newsPane.getChildren().add(nextButton);
             StackPane.setAlignment(nextButton, Pos.BOTTOM_RIGHT);
-            StackPane.setMargin(nextButton, new Insets(0, 40, 30, 40));
+            StackPane.setMargin(nextButton, new Insets(0, 410, 35, 40));
 
             int[] currentArticle = {0};
 
@@ -278,7 +284,7 @@ public class BiasApp extends Application {
         desktopIcons.getChildren().add(videoIconpic);
 
         videoIconpic.setOnMouseClicked(event -> {
-
+                musicPlayer.pause();
 
                 Media secretAd = new Media(
                         new java.io.File("src/videos/secret_ad.mp4")
@@ -292,20 +298,37 @@ public class BiasApp extends Application {
                 videoView.setFitWidth(680);
                 videoView.setFitHeight(420);
                 videoView.setPreserveRatio(true);
-                amayaLayout.getChildren().add(videoView);
-                cyberFemplayer.play();
+
+
+                Button closeButt = new Button("X");
+
+            StackPane videoPane = new StackPane();
+            videoPane.setMaxSize(680, 425);
+            videoPane.setPrefSize(680, 425);
+            videoPane.getChildren().addAll(videoView, closeButt);
+            StackPane.setAlignment(closeButt, Pos.TOP_RIGHT);
+
+            amayaLayout.getChildren().add(videoPane);
+
+            cyberFemplayer.play();
+
+            closeButt.setOnAction(e -> {
+                cyberFemplayer.stop();
+                amayaLayout.getChildren().remove(videoPane);
+                musicPlayer.play();
 
         });
+        });
         Image womanIconImage =
-                new Image("file:src/images/news_icon.png");
+                new Image("file:src/images/woman_icon.png");
 
         ImageView womanIconView =
-                new ImageView(newsIconImage);
+                new ImageView(womanIconImage);
 
         womanIconView.setFitWidth(60);
         womanIconView.setPreserveRatio(true);
 
-        Label womanLabel = new Label("news");
+        Label womanLabel = new Label("womanosphere");
 
         womanLabel.setStyle(
                 "-fx-background-color: transparent;" +
@@ -322,61 +345,122 @@ public class BiasApp extends Application {
         );
 
         desktopIcons.getChildren().add(womanIconBox);
-        womanosphere.setOnMouseClicked(actionEvent1 -> {
+        womanIconBox.setOnMouseClicked(actionEvent1 -> {
 
             Image womansphereImage = new Image("file:src/images/home.png");
             ImageView womanSphereview = new ImageView(womansphereImage);
             womanSphereview.setFitWidth(610);
-            womanSphereview.setFitHeight(550);
+            womanSphereview.setPreserveRatio(true);
 
             Pane womanSpherelayout = new Pane();
             womanSpherelayout.getChildren().add(womanSphereview);
-            womanSpherelayout.setPrefSize(610, 550);
 
-            Button home = new Button();
-            home.setLayoutX(194);
-            home.setLayoutY(81);
-            home.setPrefSize(120, 44);
-            home.setStyle("-fx-background-color: transparent;");
+            Button home = new Button("home");
+            home.setStyle("-fx-background-color: lightgray;");
+            Button exit =  new Button("X");
 
-            Button amayaPost = new Button();
-            amayaPost.setLayoutX(335);
-            amayaPost.setLayoutY(81);
-            amayaPost.setPrefSize(120, 44);
-            amayaPost.setStyle("-fx-background-color: transparent;");
+            home.setLayoutX(20);
+            home.setLayoutY(10);
 
 
-            Button herEssay = new Button();
-            herEssay.setLayoutX(475);
-            herEssay.setLayoutY(81);
-            herEssay.setPrefSize(120, 44);
-            herEssay.setStyle("-fx-background-color: transparent;");
 
-            Image amayaPostimage = new Image("file:src/images/blog.png");
-            Image essayImage = new Image("file:src/images/essay.png");
+
+
+            Button prayerPost = new Button("womanosphere");
+            prayerPost.setStyle("-fx-background-color: lightgray;");
+            prayerPost.setLayoutX(100);
+            prayerPost.setLayoutY(10);
+
+
+
+            Button herBlog = new Button("blog");
+            herBlog.setStyle("-fx-background-color: lightgray;");
+            herBlog.setLayoutX(230);
+            herBlog.setLayoutY(10);
+
+
+            exit.setLayoutX(570);
+            exit.setLayoutY(15);
+            exit.setPrefSize(28, 28);
+
+            exit.setStyle(
+                    "-fx-background-color: white;" +
+                            "-fx-text-fill: black;" +
+                            "-fx-border-color: black;"
+            );
+
+
+            Image prayerPostimage = new Image("file:src/images/blog.png");
+            Image blogImage = new Image("file:src/images/manosphere.png");
 
             home.setOnAction(event -> {
                 womanSphereview.setImage(womansphereImage);
             });
 
-            amayaPost.setOnAction(event -> {
-                womanSphereview.setImage(amayaPostimage);
+            prayerPost.setOnAction(event -> {
+                womanSphereview.setImage(prayerPostimage);
             });
 
-            herEssay.setOnAction(event -> {
-                womanSphereview.setImage(essayImage);
+            herBlog.setOnAction(event -> {
+                womanSphereview.setImage(blogImage);
             });
+
+
 
             womanSpherelayout.getChildren().addAll(
                     home,
-                    amayaPost,
-                    herEssay
-            ) ;
-            womanSpherelayout.setPrefSize(610, 550);
-            womanSpherelayout.setMaxSize(610, 550);
-            amayaLayout.getChildren().add(womanSpherelayout);
+                    prayerPost,
+                    herBlog,
+
+                    exit
+            );
+
+
+            ScrollPane scrollPane = new ScrollPane(womanSpherelayout);
+
+            scrollPane.setPrefSize(610, 550);
+            scrollPane.setMaxSize(610, 550);
+            scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+            scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+
+            exit.setOnAction(event -> {
+                amayaLayout.getChildren().remove(scrollPane);
+            });
+
+            amayaLayout.getChildren().add(scrollPane);
+
+
 
         });
+
+        Image passwordIconImage =
+                new Image("file:src/images/news_icon.png");
+
+        ImageView passwordIconView =
+                new ImageView(newsIconImage);
+
+        passwordIconView.setFitWidth(60);
+        passwordIconView.setPreserveRatio(true);
+
+        Label passwordLabel = new Label("???");
+
+        passwordLabel.setStyle(
+                "-fx-background-color: transparent;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-size: 16px;"
+        );
+
+        VBox passwordIconBox = new VBox(10);
+        passwordIconBox.setAlignment(Pos.CENTER_LEFT);
+
+        passwordIconBox.getChildren().addAll(
+                passwordIconView,
+                passwordLabel
+        );
+
+        desktopIcons.getChildren().add(passwordIconBox);
+
+
 
 
 
