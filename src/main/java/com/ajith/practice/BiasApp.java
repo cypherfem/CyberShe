@@ -1,5 +1,6 @@
 package com.ajith.practice;
 
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -68,7 +69,7 @@ public class BiasApp extends Application {
         backgroundView.fitHeightProperty().bind(scene.heightProperty());
         backgroundView.setPreserveRatio(false);
 
-        primaryStage.setTitle("amaya's computer :]");
+        primaryStage.setTitle("prayer's computer :]");
         primaryStage.setScene(scene);
 
         Media music = new Media(
@@ -434,10 +435,10 @@ public class BiasApp extends Application {
         });
 
         Image passwordIconImage =
-                new Image("file:src/images/news_icon.png");
+                new Image("file:src/images/password_icon.png");
 
         ImageView passwordIconView =
-                new ImageView(newsIconImage);
+                new ImageView(passwordIconImage);
 
         passwordIconView.setFitWidth(60);
         passwordIconView.setPreserveRatio(true);
@@ -460,7 +461,52 @@ public class BiasApp extends Application {
 
         desktopIcons.getChildren().add(passwordIconBox);
 
+passwordIconBox.setOnMouseClicked(event -> {
 
+    PasswordField passwordBox = new PasswordField();
+    passwordBox.setPromptText("enter password. hint: explore prayer's desktop, find capped letters.");
+    passwordBox.setMaxWidth(200);
+
+    Button enterButton = new Button("ENTER");
+
+    VBox passwordStuff = new VBox(10, passwordBox, enterButton);
+    passwordStuff.setAlignment(Pos.CENTER);
+
+    StackPane passwordScreen = new StackPane(passwordStuff);
+    passwordScreen.setStyle("-fx-background-color: black;");
+
+    amayaLayout.getChildren().add(passwordScreen);
+
+    enterButton.setOnAction(e -> {
+
+        if (passwordBox.getText().equals("WOMANOSPHERE")) {
+
+            musicPlayer.stop();
+
+            amayaLayout.getChildren().clear();
+
+            Media psa = new Media(
+                    new java.io.File("src/videos/psa.mp4")
+                            .toURI()
+                            .toString()
+            );
+            MediaPlayer psaPlayer = new MediaPlayer(psa);
+            MediaView psaView = new MediaView(psaPlayer);
+
+            psaView.fitWidthProperty().bind(amayaLayout.widthProperty());
+            psaView.fitHeightProperty().bind(amayaLayout.heightProperty());
+            psaView.setPreserveRatio(true);
+
+            amayaLayout.getChildren().add(psaView);
+
+            psaPlayer.play();
+
+            psaPlayer.setOnEndOfMedia(() -> {
+                primaryStage.close();
+            });
+        }
+    });
+});
 
 
 
