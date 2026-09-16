@@ -1,17 +1,28 @@
+//Gradle is the build tool your project is using. It helps compile your Java code, run the project, manage libraries, and build the final application.
+// Maven Central → the online repository where Java libraries are stored
+//we are using the build tool gradle not maven, but gradle is downloading packages from Maven Central.
+
+//what tools are we using for our program? java and javafx
+//id means identify the name of the plugin
+//plugin is the extra abilities gradle
 plugins {
     id 'java'
     id 'org.openjfx.javafxplugin' version '0.1.0'
 }
-
+//where gradle looks for external linaries
+//when project needs a dependency, look  for it in maven centeral
 repositories {
     mavenCentral()
 }
 
+//configure = give settings/instructions
+//configures javafx
+//modules mean what we need for project media includes videos and controls include buttons
 javafx {
     version = '26.0.1'
     modules = [ 'javafx.controls', 'javafx.media' ]
 }
-
+//libarbies
 dependencies {
     implementation("com.openai:openai-java:4.43.0")
 

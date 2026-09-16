@@ -36,7 +36,7 @@ public class Main {
         System.out.println("Program ended.");
     }
     public static String analyzeWithAI(String sentence) {
-
+//prompt to the ai
         String prompt =
                 "Analyze this sentence for gender bias. " +
                         "Reply in exactly 4 short lines: " +
@@ -45,46 +45,68 @@ public class Main {
                         "Explanation: one short sentence, " +
                         "Rewrite: one short neutral rewrite. " +
                         "Sentence: " + sentence;
-
-        String myApikey = System.getenv("OPENROUTER_API_KEY");
-
+//get the api key stored in my computer
+        String myApikey = System.getenv("my_api_key");
+//create an http client, like an envelope the request will send
         HttpClient client = HttpClient.newHttpClient();
-
-        URI uri = URI.create("https://openrouter.ai/api/v1/chat/completions");
+//url of the api
+        URI uri = URI.create("https://api.groq.com/openai/v1/chat/completions");
+       //this is a JAVA string not JSON. It is just formatted as a JSON
+        // syntax is key: value ex: name: chenuki, key is the identifer.
+        //the value of msgs is inside an array, and {} mean object
+        //inside we state that we are the user and the content contains our prompt
+        //array because we can send multiple prompts
+        //formatted to replace the " to \" so OpenAI knows hey the string isn't over
         String json = """
 {
-  "model": "nvidia/nemotron-3-nano-30b-a3b:free",
+  "model": "openai/gpt-oss-120b",
   "messages": [
     {
       "role": "user",
       "content": "%s"
     }
   ]
-}
+}        
 """.formatted(prompt.replace("\"", "\\\""));
         try {
+            //making http request. client the  send and request is the msg to the api
+            //body publishers converts the JSON given by OpenAI to Java String
             HttpRequest myRequest = HttpRequest.newBuilder()
                     .uri(uri)
                     .timeout(Duration.ofSeconds(30))
                     .header("Authorization", "Bearer " + myApikey)
                     .header("Content-Type", "application/json")
+                    //
                     .POST(HttpRequest.BodyPublishers.ofString(json))
                     .build();
-
+            //send my request and the response back should be a java string. response has the whole http object from open router.
             HttpResponse<String> response =
                     client.send(
                             myRequest,
                             HttpResponse.BodyHandlers.ofString()
                     );
 
+            System.out.println("Status: " + response.statusCode());
+            System.out.println("Body: " + response.body());
+            if (response.statusCode() != 200) {
+                return "API error";
+            }
+            //create a helper that can read the java string that is JSON formatted
             ObjectMapper mapper = new ObjectMapper();
+            //“Jackson, read this String that contains JSON-formatted text and turn it into a JSON tree I can navigate.”
+            //A tree is just a way of organizing data that has things inside other things.
             JsonNode root = mapper.readTree(response.body());
 
             String AIanswer = root
+                    //choices is an array of ai gen responses
                     .get("choices")
+                    //first answer, cus ai can hv multiple
                     .get(0)
+                    //ai's reply objects
                     .get("message")
+                    //the acutal response
                     .get("content")
+                    //turn these words into java string
                     .asText();
 
             return AIanswer;
@@ -231,13 +253,14 @@ public class Main {
 
         return results.toString();
     }
-
+//find if sentence is biased
     public static int checkWords(String[] userWords, ArrayList<String> wordList, String categoryName) {
         boolean foundAny = false;
         int count = 0;
         System.out.println(categoryName + " words found:");
 
         for (String w : userWords) {
+            //find anything that is NOT a lowercase letter
             w = w.replaceAll("[^a-z]", "");
 
             if (wordList.contains(w)) {
@@ -278,12 +301,12 @@ public class Main {
         return count;
 
     }
-//she is not very capable
+//she is not dumb but she is smart
     public static boolean dectectNegitiveskills(ArrayList<String> negationList, ArrayList<String> powerList, String userText) {
         String[] userWords = userText.split(" ");
         int powerWordindex = -1;
         int negitiveWordindex = -1;
-
+//she is dumb but nice
         for (int i = 0; i < userWords.length; i++) {
             String currentWord = userWords[i].replaceAll("[^a-z']", "");
 
@@ -515,7 +538,7 @@ return emotionalStereotypes;
         abiltySterotypes.add("can't understand technology");
 
 
-//hi there how r u
+
         return abiltySterotypes;
     }
 

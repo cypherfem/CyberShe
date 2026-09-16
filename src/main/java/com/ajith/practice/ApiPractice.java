@@ -5,6 +5,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import com.fasterxml.jackson.databind.JsonNode;
+//jackson is the libary to work with JSON
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ApiPractice {
@@ -30,7 +31,8 @@ public class ApiPractice {
    HttpRequest myRequest = HttpRequest.newBuilder()
                 .uri(uri).timeout(Duration.ofSeconds(30))
                 .header("Authorization","Bearer " + myApikey).header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(json))
+                //Publisher = Java has an object that knows how to provide/send the body data when the HTTP request happens.
+           .POST(HttpRequest.BodyPublishers.ofString(json))
                 .build();
 try {
     HttpResponse<String> response =
@@ -40,7 +42,12 @@ try {
                         );
     System.out.println("Current Status: " + response.statusCode());
 
+
+    //this as a JSON reader/helper
     ObjectMapper Ourmapper = new ObjectMapper();
+    // response.body() is the JSON text OpenRouter sent back
+    // readTree() organizes that JSON so we can move through it easily //
+    // "root" means the top/start of the JSON
     JsonNode root = Ourmapper.readTree(response.body());
     String AIanswer = root
             .get("choices")
